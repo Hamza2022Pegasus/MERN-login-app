@@ -21,9 +21,9 @@ let db
 connecttodb((err)=>{
     if (!err){
         app.listen(port,()=>{
-            console.log({"powereater1":"uKnOnMZiFqqD1opR"})
-            console.log("mongodb+srv://powereater1:uKnOnMZiFqqD1opR@cluster0.9pvs1nh.mongodb.net/")
-            console.log("mongodb+srv://powereater1:<password>@cluster0.9pvs1nh.mongodb.net/")
+            // console.log({"powereater1":"uKnOnMZiFqqD1opR"})
+            // console.log("mongodb+srv://powereater1:uKnOnMZiFqqD1opR@cluster0.9pvs1nh.mongodb.net/")
+            // console.log("mongodb+srv://powereater1:<password>@cluster0.9pvs1nh.mongodb.net/")
         })
         db=getDB()   
     }
@@ -46,14 +46,18 @@ app.get('/users', (req, res) => {
 
 app.post('/users/token',(req,res)=>{
     const {token} = req.body;
-    db.collection('users').findOne({accessToken:token})
-    .then((doc)=>{
-        if (doc!=null){
-            res.status(200).json({success:true,doc})
-        }else{
-            res.status(200).json({success:false})
-        }
-    })
+    try {
+        db.collection('users').findOne({accessToken:token})
+        .then((doc)=>{
+            if (doc!=null){
+                res.status(200).json({success:true,doc})
+            }else{
+                res.status(200).json({success:false})
+            }
+        })
+    } catch (error) {
+        res.status(200).json({success:false})
+    }
 })
 
 app.post('/users',(req,res)=>{
